@@ -1,40 +1,48 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.Entities.Visit;
-import com.example.demo.Repositories.VisitsRepository;
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.example.demo.Dto.GameServerInfo;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class IndexController {
 
-    private final VisitsRepository visitsRepository;
-
-    public IndexController(VisitsRepository visitsRepository) {
-        this.visitsRepository = visitsRepository;
-    }
 
     @GetMapping("/")
     public ModelAndView index() {
-        Map<String, String> model = new HashMap<>();
-        model.put("name", "Nursultan");
-        Iterable<Visit> visits = visitsRepository.findAll();
-        List<Visit> visitList = new ArrayList<>();
-        visits.forEach(visitList::add);
-        model.put("visits",Integer.toString(visitList.size()));
-        Visit visit = new Visit();
-        visit.description = String.format("Visited at %s", LocalDateTime.now());
-        visitsRepository.save(visit);
 
-        return new ModelAndView("index", model);
+        return new ModelAndView("index");
+    }
+
+    @PostMapping("/start")
+    public String Start(@RequestBody String gameServerInfo){
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        try {
+
+            HttpPost request = new HttpPost("http://37.151.106.142:8585/create");
+            StringEntity params = new StringEntity(gameServerInfo);
+            request.addHeader("content-type", "application/json");
+            request.setEntity(params);
+            HttpResponse response = httpClient.execute(request);
+            HttpEntity entity = response.getEntity();
+            String responseString = EntityUtils.toString(entity, "UTF-8");
+            return responseString;
+        } catch (Exception ex) {
+            return ex.getMessage();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
     }
 }

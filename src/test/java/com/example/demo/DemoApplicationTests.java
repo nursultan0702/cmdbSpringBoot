@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.Repositories.VisitsRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,14 +21,6 @@ public class DemoApplicationTests {
 
 	@Autowired
 	private MockMvc mockMvc;
-
-	@Autowired
-	private VisitsRepository visitsRepository;
-
-	@Before
-	public void setUp() throws Exception {
-		visitsRepository.deleteAll();
-	}
 
 	@Test
 	public void indexControllerShouldReturnHtmlPage() throws Exception {

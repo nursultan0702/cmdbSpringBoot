@@ -1,7 +1,3 @@
-com\example\demo\Entities\TurbineData.class
-com\example\demo\Controllers\ApiController.class
-com\example\demo\Repositories\TurbineDataRepository.class
-com\example\demo\Controllers\IndexController.class
-com\example\demo\CmdbSpringBoot.class
-com\example\demo\Entities\Visit.class
-com\example\demo\Repositories\VisitsRepository.class
+com/example/demo/Dto/GameServerInfo.class
+com/example/demo/CmdbSpringBoot.class
+com/example/demo/Controllers/IndexController.class

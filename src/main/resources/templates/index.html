@@ -37,7 +37,7 @@
       <div class="side-navbar-wrapper">
         <div class="sidenav-header d-flex align-items-center justify-content-center">
           <div class="sidenav-header-inner text-center"><img src="img/avatar-1.jpg" alt="person" class="img-fluid rounded-circle">
-            <h2 class="h5 text-uppercase">{{ name }}</h2><span class="text-uppercase">Web Developer</span>
+            <h2 class="h5 text-uppercase"></h2><span class="text-uppercase">Demo</span>
           </div>
           <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong>B</strong><strong class="text-primary">D</strong></a></div>
         </div>
@@ -119,22 +119,21 @@
             <!-- Pie Chart-->
             <div class="col-lg-3 col-md-6">
               <div class="wrapper project-progress">
-                <h2 class="display h4">Pie chart from DB</h2>
-                <p> Надо в таблицу добавить данные и график будет показывать данные с таблицы</p>
-                <div class="pie-chart">
-                  <canvas id="pieChart"></canvas>
-                </div>
+                <h2 class="display h4">Create server</h2>
+                  <p >Steam ID</p><input id="steamid" type="text"/>
+                  <p >Map</p><input id="map" type="text"/>
+                  <p >Max players</p><input id="maxplayer" type="text"/>
+                  <p >Players Steam ID</p><input id="playerssteamid" type="text"/>
+                <button class="active" id="creatbtn" onclick="createBtn()">Create Server</button>
+                <p>Server IP address:</p>
+                <input class="disabled" value="server up address" id="serverip" type="text" />
               </div>
             </div>
             <!-- Line Chart -->
             <div class="col-lg-6 col-md-12 flex-lg-last flex-md-first align-self-baseline">
               <div class="wrapper sales-report">
-                <h2 class="display h4">Data from Turbine</h2>
-                <p> Надо в таблицу добавить данные и график будет показывать данные с таблицы</p>
-                <div class="line-chart">
-                  <canvas id="lineCahrt"></canvas>
-
-                </div>
+                <h2 class="display h4">Stop server</h2>
+                <button class="alert-danger" onclick="stopBtn()">Stop Server</button>
               </div>
             </div>
           </div>
@@ -176,5 +175,34 @@
     <script src="js/charts-home.js"></script>
     <script src="js/front.js"></script>
     <!---->
+
+    <script>
+      function createBtn() {
+          var $creatorSteamId = $("#steamid").val();
+          var $map = $("#map").val();
+          var $maxplayer = $("#maxplayer").val();
+          var $playerssteamid = $("#playerssteamid").val()
+          var data = { creatorSteamId: $creatorSteamId, maxPlayers: $maxplayer, isPublic: true, mapName: $map, players: $maxplayer };
+
+          $.ajax({
+              type: "POST",
+              url: "/start",
+              // The key needs to match your method's input parameter (case-sensitive).
+              data: JSON.stringify(data),
+              contentType: "application/json; charset=utf-8",
+              dataType: "json",
+              success: function(data){alert(data);},
+              failure: function(errMsg) {
+                  alert(errMsg);
+              }
+          });
+          $("#serverip").val("37.151.106.142:27015")
+      }
+
+      function stopBtn() {
+          $.get("http://37.151.106.142:8585/stop")
+          $("#serverip").val("Server is stoped")
+      }
+    </script>
   </body>
 </html>
