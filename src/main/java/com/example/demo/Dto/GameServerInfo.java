@@ -1,12 +1,26 @@
 package com.example.demo.Dto;
 
-public class GameServerInfo {
+import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "gameserverinfo")
+
+public class GameServerInfo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     public String creatorSteamId;
     public int maxPlayers;
     public boolean isPublic;
     public String mapName;
     public String players;
+    @Column(nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    private Date createdAt;
 
     public String getMapName() {
         return mapName;
@@ -48,6 +62,9 @@ public class GameServerInfo {
         this.players = players;
     }
 
+    public String toString(){
+        return "creatorSteamId: '" + this.creatorSteamId + "', maxPlayers: '" + this.maxPlayers + "', mapName: '" + this.mapName + "', players: "+ this.players;
+    }
 
 }
 
